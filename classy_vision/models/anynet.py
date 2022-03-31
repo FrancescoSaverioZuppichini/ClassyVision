@@ -283,10 +283,14 @@ class ResBottleneckBlock(nn.Module):
         self.depth = self.f.depth
 
     def forward(self, x, *args):
+        res = x
+        x = self.f(x)
+
         if self.proj_block:
-            x = self.bn(self.proj(x)) + self.f(x)
-        else:
-            x = x + self.f(x)
+            res = self.bn(self.proj(res)) 
+        
+        x = res + x
+        
         return self.activation(x)
 
 
